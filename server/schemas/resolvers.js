@@ -2,7 +2,7 @@ const { User, Book } = require('../models');
 
 const resolvers = {
   Query: {
-    user: async (_, { id }) => {
+    me: async (parent, { id }) => {
       const user = await User.findById(id);
 
       if (!user) {
@@ -11,18 +11,9 @@ const resolvers = {
 
       return user;
     },
-    userByUsername: async (_, { username }) => {
-      const user = await User.findOne({ username });
-
-      if (!user) {
-        throw new Error("Can't find a user with this username!");
-      }
-
-      return user;
-    },
   },
   Mutation: {
-    createUser: async (_, { username, email, password }) => {
+    createUser: async (parent, { username, email, password }) => {
       const user = await User.create({ username, email, password });
 
       if (!user) {
@@ -32,7 +23,7 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    login: async (_, { usernameOrEmail, password }) => {
+    login: async (parent, { usernameOrEmail, password }) => {
       const user = await User.findOne({
         $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
       });
@@ -50,7 +41,7 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    saveBook: async (_, { book }, { user }) => {
+    saveBook: async (parent, { book }, { user }) => {
       const updatedUser = await User.findOneAndUpdate(
         { _id: user.id },
         { $addToSet: { savedBooks: book } },
@@ -63,7 +54,7 @@ const resolvers = {
 
       return updatedUser;
     },
-    deleteBook: async (_, { bookId }, { user }) => {
+    deleteBook: async (parent, { bookId }, { user }) => {
       const updatedUser = await User.findOneAndUpdate(
         { _id: user.id },
         { $pull: { savedBooks: { bookId } } },
