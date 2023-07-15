@@ -12,6 +12,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^3.6.1",
+    "express": "^4.17.2",
+    "bcrypt": "^5.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "graphql": "^16.2.0",
+    "mongoose": "^7.0.2"
+  },
   "devDependencies": {
     "concurrently": "^5.1.0"
   }
