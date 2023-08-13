@@ -1,5 +1,7 @@
 const { User } = require('../models');
 const { signToken } = require("../utils/auth");
+const { AuthenticationError } = require("apollo-server-express");
+
 
 const resolvers = {
   Query: {
@@ -12,7 +14,7 @@ const resolvers = {
         return userData;
       }
 
-      throw new Error("Not logged in");
+      throw new AuthenticationError("Not logged in");
     },
   },
   Mutation: {
@@ -26,13 +28,13 @@ const resolvers = {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw new Error("Incorrect credentials");
+        throw new AuthenticationError("Incorrect credentials");
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw new Error("Incorrect credentials");
+        throw new AuthenticationError("Incorrect credentials");
       }
 
       const token = signToken(user);
@@ -49,7 +51,7 @@ const resolvers = {
         return updatedUser;
       }
 
-      throw new Error("You need to be logged in!");
+      throw new AuthenticationError("You need to be logged in!");
     },
     removeBook: async (parent, { bookId }, context) => {
       if (context.user) {
@@ -62,7 +64,7 @@ const resolvers = {
         return updatedUser;
       }
 
-      throw new Error("You need to be logged in!");
+      throw new AuthenticationError("You need to be logged in!");
     },
   },
 };
