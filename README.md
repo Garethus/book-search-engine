@@ -18,7 +18,7 @@ This Google Books search engine is built with MERN stack. Users can signup and l
 
 ## Live Application
 
-[Link of the Deployed App](https://)
+[Link of the Deployed App](https://rocky-peak-78948-a6d276ed0061.herokuapp.com/)
 
 ## Screeshots
 
